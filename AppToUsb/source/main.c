@@ -659,7 +659,7 @@ void checkusbpkg(char *sourcedir, char* destdir) {
             struct dirent *dp;
             struct stat info;
             char upkg_path[1024];
-            dir = opendir("/mnt/usb0/");
+            dir = opendir("/mnt/usb1/");
             if (dir) {
             while ((dp = readdir(dir)) != NULL)
             {
@@ -667,7 +667,7 @@ void checkusbpkg(char *sourcedir, char* destdir) {
             {}
             else
             {
-            sprintf(upkg_path, "%s/%s", "/mnt/usb0", dp->d_name);
+            sprintf(upkg_path, "%s/%s", "/mnt/usb1", dp->d_name);
             if (!stat(upkg_path, &info))
             {
                 if (S_ISREG(info.st_mode))
@@ -975,42 +975,42 @@ int _main(struct thread *td) {
         sceKernelSleep(10);
         systemMessage("Last warning\n\nUnplug your usb drive to cancel this");
         sceKernelSleep(10);
-        int usbdir = open("/mnt/usb0/.dirtest", O_WRONLY | O_CREAT | O_TRUNC, 0777);
+        int usbdir = open("/mnt/usb1/.dirtest", O_WRONLY | O_CREAT | O_TRUNC, 0777);
          if (usbdir == -1)
             {
-                  systemMessage("No usb mount found.\nYou must use a eXfat formatted usb hdd\nThe USB drive must be plugged into USB0");
+                  systemMessage("No usb mount found.\nYou must use a eXfat formatted usb hdd\nThe USB drive must be plugged into usb1");
                   nthread_run = 0;
                   return 0;
             }
             else
             {
                         close(usbdir);
-                        unlink("/mnt/usb0/.dirtest");
-                        mkdir("/mnt/usb0/PS4/", 0777);
-                        sprintf(ini_file_path, "/mnt/usb0/%s", INI_FILE);
+                        unlink("/mnt/usb1/.dirtest");
+                        mkdir("/mnt/usb1/PS4/", 0777);
+                        sprintf(ini_file_path, "/mnt/usb1/%s", INI_FILE);
                         if (!file_exists(ini_file_path))
                         {
-                        sprintf(ini_file_path, "/mnt/usb0/PS4/%s", INI_FILE);
+                        sprintf(ini_file_path, "/mnt/usb1/PS4/%s", INI_FILE);
                         makeini();
                         }
-                        systemMessage("Copying Apps to USB0\n\nThis will take a while if you have lots of games installed");
-                        copyDir("/user/app","/mnt/usb0/PS4");
+                        systemMessage("Copying Apps to usb1\n\nThis will take a while if you have lots of games installed");
+                        copyDir("/user/app","/mnt/usb1/PS4");
                         if (!isignupdates())
                         {
-                           mkdir("/mnt/usb0/PS4/updates/", 0777);
-                           systemMessage("Copying updates to USB0");
-                           copyDir("/user/patch","/mnt/usb0/PS4/updates");
+                           mkdir("/mnt/usb1/PS4/updates/", 0777);
+                           systemMessage("Copying updates to usb1");
+                           copyDir("/user/patch","/mnt/usb1/PS4/updates");
                         }
                         if (isdlc())
                         {
-                           mkdir("/mnt/usb0/PS4/dlc/", 0777);
-                           systemMessage("Copying dlc to USB0");
-                           copyDir("/user/addcont","/mnt/usb0/PS4/dlc");
+                           mkdir("/mnt/usb1/PS4/dlc/", 0777);
+                           systemMessage("Copying dlc to usb1");
+                           copyDir("/user/addcont","/mnt/usb1/PS4/dlc");
                         }
                         if (!isnometa())
                         {
                            systemMessage("Processing appmeta");
-                           copyMeta("/mnt/usb0/PS4","/user/appmeta", 0);
+                           copyMeta("/mnt/usb1/PS4","/user/appmeta", 0);
                         }
                         if (isrelink())
                         {
